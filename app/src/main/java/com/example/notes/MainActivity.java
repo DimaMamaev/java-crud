@@ -2,6 +2,8 @@ package com.example.notes;
 
 import android.os.Bundle;
 
+import com.example.notes.data.DatabaseHandler;
+import com.example.notes.model.Item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -16,12 +18,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
     private Button saveButton;
     private EditText noteTitle;
     private EditText noteText;
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +35,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        saveButton = findViewById(R.id.save_btn);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSave();
-            }
-        });
+        databaseHandler = new DatabaseHandler(this);
+
+
+        List<Item> items = databaseHandler.getAllNotes();
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -48,8 +50,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void onSave() {
-//        hhh
+    private void onSave(View v) {
+        Item item = new Item();
+
+        String title = noteTitle.getText().toString().trim();
+        String text = noteText.getText().toString().trim();
+
+        item.setNoteText(text);
+        item.setNoteTitle(title);
+
+        databaseHandler.addNote(item);
+
+        Snackbar.make(v, "Note saved", Snackbar.LENGTH_SHORT).show();
     }
 
     private void createPopUpDialog() {
@@ -58,9 +70,23 @@ public class MainActivity extends AppCompatActivity {
 
         noteTitle = view.findViewById(R.id.note_title);
         noteText = view.findViewById(R.id.note_text);
+        saveButton = view.findViewById(R.id.save_btn);
+
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!noteTitle.getText().toString().isEmpty()
+                        && !noteText.getText().toString().isEmpty()) {
+                    onSave(v);
+                } else {
+                    Snackbar.make(v, "Empty fields not allowed", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         builder.setView(view);
-
         dialog = builder.create();
         dialog.show();
     }
