@@ -1,5 +1,6 @@
 package com.example.notes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.notes.data.DatabaseHandler;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Handler;
 import android.view.View;
 
 import android.view.Menu;
@@ -62,6 +64,15 @@ public class MainActivity extends AppCompatActivity {
         databaseHandler.addNote(item);
 
         Snackbar.make(v, "Note saved", Snackbar.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+
+                startActivity(new Intent(MainActivity.this, NotesListActivity.class));
+            }
+        }, 1500);
     }
 
     private void createPopUpDialog() {
