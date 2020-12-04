@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
         View view = getLayoutInflater().inflate(R.layout.popup, null);
 
-        noteTitle = view.findViewById(R.id.note_title);
-        noteText = view.findViewById(R.id.note_text);
+        noteTitle = view.findViewById(R.id.note_title_el);
+        noteText = view.findViewById(R.id.note_text_el);
         saveButton = view.findViewById(R.id.save_btn);
 
 
