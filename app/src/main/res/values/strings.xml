@@ -17,4 +17,5 @@
     <string name="type_your_note">Type your note...</string>
     <string name="editbtnn">editBtnn</string>
     <string name="deltebtnn">delteBtnn</string>
+    <string name="notelistbtn">noteListBtn</string>
 </resources>

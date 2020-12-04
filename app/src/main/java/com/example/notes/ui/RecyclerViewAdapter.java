@@ -36,9 +36,9 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
         Item item = itemList.get(position);
-        holder.noteTitleEl.setText(item.getNoteTitle());
-        holder.noteTextEl.setText(item.getNoteText());
-        holder.noteDateEl.setText(item.getDateNoteAdded());
+        holder.noteTitleEl.setText("Note: " + item.getNoteTitle());
+        holder.noteTextEl.setText("Description: " +item.getNoteText());
+        holder.noteDateEl.setText("Created at: " +item.getDateNoteAdded());
     }
 
     @Override
