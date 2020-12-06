@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import com.example.notes.R;
 import com.example.notes.data.DatabaseHandler;
 import com.example.notes.model.Item;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -59,6 +61,7 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder>
         public ImageButton editBtnEl;
         public ImageButton deleteBtnEl;
         public  int id;
+
         public ViewHolder(@NonNull View itemView, Context ctx) {
             super(itemView);
             context = ctx;
@@ -74,16 +77,65 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder>
 
         @Override
         public void onClick(View v) {
-            int position;
+            int position = getAdapterPosition();
+            Item item = itemList.get(position);
+
             switch (v.getId()){
                 case R.id.editBtn:
+                    editItem(item);
                     break;
                 case  R.id.deleteBtn:
-                    position = getAdapterPosition();
-                    Item item = itemList.get(position);
                     deleteItem(item.getId());
                     break;
             }
+        }
+
+
+        private void editItem (Item note) {
+
+            Button saveButton;
+            EditText noteTitle;
+            EditText noteText;
+            TextView popupTitle;
+
+            builder = new AlertDialog.Builder(context);
+            inflater = LayoutInflater.from(context);
+
+            View view = inflater.inflate(R.layout.popup, null);
+
+            noteTitle = view.findViewById(R.id.note_title_el);
+            noteText = view.findViewById(R.id.note_text_el);
+            saveButton = view.findViewById(R.id.save_btn);
+            popupTitle = view.findViewById(R.id.popup_title);
+
+            saveButton.setText(R.string.edit_btn_update);
+            popupTitle.setText(R.string.edit_popup);
+            noteTitle.setText(note.getNoteTitle());
+            noteText.setText(note.getNoteText());
+
+            builder.setView(view);
+            dialog = builder.create();
+            dialog.show();
+
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseHandler databaseHandler = new DatabaseHandler(context);
+
+                    note.setNoteTitle(noteTitle.getText().toString());
+                    note.setNoteText(noteText.getText().toString());
+
+                    if(noteTitle.getText().toString().isEmpty() &&
+                       noteText.getText().toString().isEmpty()) {
+                        Snackbar.make(view, "Empty fields not allowed",Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        databaseHandler.updateNote(note);
+                        notifyItemChanged(getAdapterPosition(), note);
+                    }
+                        dialog.dismiss();
+                }
+            });
+
         }
 
         private void deleteItem (int id) {

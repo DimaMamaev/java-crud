@@ -64,6 +64,7 @@
                 android:layout_marginEnd="151dp"
                 android:layout_marginBottom="9dp"
                 android:background="@android:drawable/ic_menu_delete"
+                android:backgroundTint="#FF0000"
                 android:contentDescription="@string/deltebtnn" />
 
             <ImageButton
@@ -75,6 +76,7 @@
                 android:layout_marginEnd="206dp"
                 android:layout_marginBottom="7dp"
                 android:background="@android:drawable/ic_menu_edit"
+                android:backgroundTint="#000000"
                 android:contentDescription="@string/editbtnn" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

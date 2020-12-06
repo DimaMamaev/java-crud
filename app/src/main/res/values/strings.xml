@@ -21,4 +21,6 @@
     <string name="alert_text">Are you sure?</string>
     <string name="noBtnAlert">No</string>
     <string name="yesBtnAlert">Yes</string>
+    <string name="edit_popup">Edit Note.</string>
+    <string name="edit_btn_update">Update</string>
 </resources>
