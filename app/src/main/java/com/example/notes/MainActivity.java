@@ -37,19 +37,29 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        databaseHandler = new DatabaseHandler(this);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
+        databaseHandler = new DatabaseHandler(this);
 
         List<Item> items = databaseHandler.getAllNotes();
 
-
-        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                     createPopUpDialog();
             }
         });
+
+        passToActivity();
+    }
+
+
+
+    private void passToActivity () {
+        if (databaseHandler.getNotesCount() > 0) {
+            startActivity(new Intent(MainActivity.this, NotesListActivity.class));
+            finish();
+        }
     }
 
     private void onSave(View v) {
