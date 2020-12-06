@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import com.example.notes.R;
+import com.example.notes.data.DatabaseHandler;
 import com.example.notes.model.Item;
 
 import java.util.List;
@@ -68,12 +69,24 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder>
 
         @Override
         public void onClick(View v) {
+            int position;
             switch (v.getId()){
                 case R.id.editBtn:
                     break;
                 case  R.id.deleteBtn:
+                    position = getAdapterPosition();
+                    Item item = itemList.get(position);
+                    deleteItem(item.getId());
                     break;
             }
+        }
+
+        private void deleteItem (int id) {
+            DatabaseHandler db = new DatabaseHandler(context);
+            db.deleteNote(id);
+
+            itemList.remove(getAdapterPosition());
+            notifyItemRemoved(getAdapterPosition());
         }
 
     }
