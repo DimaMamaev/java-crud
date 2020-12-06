@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.notes.data.DatabaseHandler;
 import com.example.notes.model.Item;
@@ -32,6 +33,7 @@ public class NotesListActivity extends AppCompatActivity {
     private Button saveButton;
     private EditText noteTitle;
     private EditText noteText;
+    private TextView emptyFolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class NotesListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.notesContainer);
         floatingActionButton = findViewById(R.id.noteListBtn);
+        emptyFolder = findViewById(R.id.empty_list_title);
 
         databaseHandler = new DatabaseHandler(this);
 
@@ -53,13 +56,16 @@ public class NotesListActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerViewAdapter.notifyDataSetChanged();
 
-
         floatingActionButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 callCreateNoteDialog(v);
             }
         });
+
+        if (databaseHandler.getNotesCount() <= 0) {
+            emptyFolder.setText(R.string.empty_folder);
+        }
 
     }
 
@@ -71,6 +77,9 @@ public class NotesListActivity extends AppCompatActivity {
         noteText = view.findViewById(R.id.note_text_el);
         saveButton = view.findViewById(R.id.save_btn);
 
+        builder.setView(view);
+        dialog = builder.create();
+        dialog.show();
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,11 +92,6 @@ public class NotesListActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        builder.setView(view);
-        dialog = builder.create();
-        dialog.show();
     }
 
     private void onSave(View v) {
@@ -107,7 +111,9 @@ public class NotesListActivity extends AppCompatActivity {
             @Override
             public void run() {
                 dialog.dismiss();
+                startActivity(new Intent(NotesListActivity.this, NotesListActivity.class));
+                finish();
             }
-        }, 1500);
+        }, 1000);
     }
 }

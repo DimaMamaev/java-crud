@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(MainActivity.this, NotesListActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

@@ -54,6 +54,7 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder>
         return itemList.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView noteTitleEl;
         public TextView noteTextEl;
