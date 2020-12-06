@@ -18,4 +18,7 @@
     <string name="editbtnn">editBtnn</string>
     <string name="deltebtnn">delteBtnn</string>
     <string name="notelistbtn">noteListBtn</string>
+    <string name="alert_text">Are you sure?</string>
+    <string name="noBtnAlert">No</string>
+    <string name="yesBtnAlert">Yes</string>
 </resources>

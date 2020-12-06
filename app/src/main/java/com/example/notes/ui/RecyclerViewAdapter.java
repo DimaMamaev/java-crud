@@ -1,5 +1,6 @@
 package com.example.notes.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,10 @@ import java.util.List;
 public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder> {
     private Context context;
     private List<Item> itemList;
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
+    private LayoutInflater inflater;
+
     public RecyclerViewAdapter(Context context, List<Item> itemList) {
         this.context = context;
         this.itemList = itemList;
@@ -82,11 +87,41 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder>
         }
 
         private void deleteItem (int id) {
-            DatabaseHandler db = new DatabaseHandler(context);
-            db.deleteNote(id);
 
-            itemList.remove(getAdapterPosition());
-            notifyItemRemoved(getAdapterPosition());
+            builder = new AlertDialog.Builder(context);
+
+            inflater = LayoutInflater.from(context);
+            View view= inflater.inflate(R.layout.confirm, null);
+
+            Button noBtn = view.findViewById(R.id.alert_no_btn);
+            Button yesBtn = view.findViewById(R.id.alert_yes_btn);
+
+            builder.setView(view);
+            dialog=builder.create();
+            dialog.show();
+
+            noBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            yesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseHandler db = new DatabaseHandler(context);
+                    db.deleteNote(id);
+
+                    itemList.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+
+                    dialog.dismiss();
+                }
+            });
+
+
+
         }
 
     }
